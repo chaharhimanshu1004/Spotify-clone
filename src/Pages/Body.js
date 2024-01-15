@@ -5,7 +5,48 @@ import { useDataLayerValue } from '../DataLayer'
 import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import SongRow from '../components/SongRow';
+
+
+
 export default function Body({spotify}) {
+  const playPlaylist = (id) => {
+    spotify
+      .play({
+        context_uri: `spotify:playlist:22mm5J4DcucnRDLv0BAvti`,
+      })
+      .then((res) => {
+        spotify.getMyCurrentPlayingTrack().then((r) => {
+          dispatch({
+            type: "SET_ITEM",
+            item: r.item,
+          });
+          dispatch({
+            type: "SET_PLAYING",
+            playing: true,
+          });
+        });
+      });
+  };
+
+  const playSong = (id) => {
+    spotify
+      .play({
+        uris: [`spotify:track:${id}`],
+      })
+      .then((res) => {
+        spotify.getMyCurrentPlayingTrack().then((r) => {
+          dispatch({
+            type: "SET_ITEM",
+            item: r.item,
+          });
+          dispatch({
+            type: "SET_PLAYING",
+            playing: true,
+          });
+        });
+      });
+  };
 
   const [{discover_weekly},dispatch] = useDataLayerValue();
   console.log(discover_weekly)
@@ -26,7 +67,7 @@ export default function Body({spotify}) {
         <div className="body__icons">
           <PlayCircleFilledIcon
             className="body__shuffle"
-            // onClick={playPlaylist}
+            onClick={playPlaylist}
           />
           <FavoriteIcon fontSize="large" />
           <MoreHorizIcon />
